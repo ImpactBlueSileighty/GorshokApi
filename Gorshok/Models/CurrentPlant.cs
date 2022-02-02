@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
 
-#nullable disable
 
 namespace GorshokApi.Models
 {
@@ -12,8 +13,11 @@ namespace GorshokApi.Models
         public decimal Temperature { get; set; }
         public int StatusId { get; set; }
         public decimal Progress { get; set; }
-
+        
+        [ForeignKey("PlantId")]
         public virtual Plant Plant { get; set; }
+        [ForeignKey("StatusId")]
         public virtual Status Status { get; set; }
+
     }
 }

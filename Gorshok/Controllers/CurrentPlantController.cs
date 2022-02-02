@@ -35,16 +35,19 @@ namespace GorshokApi.Controllers
         [HttpPost("CreateCurrentPlant")]
         public IActionResult Create([FromBody] CurrentPlant plant)
         {
-            _dbContext.Add(plant);
+            _dbContext.CurrentPlants.Add(plant);
             _dbContext.SaveChanges();
-
-            return CreatedAtAction("GetPlant", new { id = plant.Id }, plant);
+            plant.Plant = _dbContext.Plants.First(e => e.Id == plant.PlantId);
+            plant.Status = _dbContext.Statuses.Single(e => e.Id == plant.StatusId);
+            return CreatedAtAction(nameof(Get), new { id = plant.Id }, plant);
         }
 
         [HttpPut("UpdateCurrentPlant")]
         public IActionResult Update([FromBody] CurrentPlant plant)
         {
-            return Ok();
+            _dbContext.Entry(plant).State = EntityState.Modified;
+            _dbContext.SaveChanges();
+            return Ok(plant);
         }
 
         [HttpDelete("DeleteCurrentPlant/{id}")]
